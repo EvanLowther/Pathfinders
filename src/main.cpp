@@ -1,5 +1,6 @@
 #include <iostream>
 #include "parser.h"
+#include "graph.h"
 using namespace std;
 
 int main(){
@@ -12,6 +13,10 @@ int main(){
     vector<pair<int,int>> edges = parseFile("data/roadNet-PA.txt");
     //Total edge count (Should be 1541898 - undirected graph)
     cout<< "Total edges: " << edges.size() << endl;
+    
+    //print out all Nodes and the list of its connections
+    Graph test(edges, 1090920);
+    test.printTestNodes(edges.size());
 
     //First 10 edges (functionality test)
     for(int i = 0; i < 10; i++){
