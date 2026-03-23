@@ -10,7 +10,7 @@ int main(){
 
     //Call parser to read the dataset
     vector<pair<int,int>> edges = parseFile("data/roadNet-PA.txt");
-    //Total edge count (Should be 1541898)
+    //Total edge count (Should be 1541898 - undirected graph)
     cout<< "Total edges: " << edges.size() << endl;
 
     //First 10 edges (functionality test)
