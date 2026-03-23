@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Pathfinders",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/main",
+      "args": [],
+      "cwd": "${workspaceFolder}/build",
+      "stopAtEntry": false,
+      "MIMode": "lldb",
+      "preLaunchTask": "Build with CMake",
+      "internalConsoleOptions": "openOnSessionStart"
+    }
+  ]
+}
