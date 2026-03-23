@@ -1,0 +1,11 @@
+#Ignore the dataset
+data/
+
+#Sstem files
+.DS_Store
+
+#Build/compiled files
+*.o
+*.out
+main
+build/
