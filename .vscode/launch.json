@@ -1,17 +1,18 @@
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "Run Pathfinders",
-      "type": "cppdbg",
-      "request": "launch",
-      "program": "${workspaceFolder}/build/main",
-      "args": [],
-      "cwd": "${workspaceFolder}/build",
-      "stopAtEntry": false,
-      "MIMode": "lldb",
-      "preLaunchTask": "Build with CMake",
-      "internalConsoleOptions": "openOnSessionStart"
-    }
-  ]
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Network Graph Build File",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/roadgraph", 
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "CMake Build"
+        }
+    ]
 }
