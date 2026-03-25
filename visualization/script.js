@@ -1,45 +1,34 @@
-import { CosmoGraph } from 'https://cdn.skypack.dev/@cosmograph/cosmograph';
-
-
-const container = document.getElementById('graph-container');
-const status = document.getElementById('status');
-
 async function init() {
+    const container = document.getElementById('graph-container');
+    
+    //Functionality/graphing the points (gets called in index.html)
+    const CosmoClass = window.CosmoGraphClass;
+
+    if (!CosmoClass) {
+        //If it's not ready yet, wait 100ms and try again
+        setTimeout(init, 100);
+        return;
+    }
+
     try {
-        status.innerText = "Fetching JSON data...";
         const response = await fetch('../data/road_network.json');
-        if (!response.ok) throw new Error("Could not find road_network.json in /data");
-
         const data = await response.json();
-        status.innerText = `Loaded ${data.nodes.length} nodes. Calculating layout...`;
 
-        const config = {
-            nodes: data.nodes,
+        //Cosmograph v2.2.1, using points and links to represent data
+        const graph = new CosmoClass(container, {
+            points: data.nodes,
             links: data.links,
-            nodeSize: 2,
-            nodeColor: '#4facfe',
-            linkWidth: 0.1,
-            linkColor: '#ffffff33',
+            pointSize: 4,
+            pointColor: '#4facfe',
             backgroundColor: '#0f172a',
-            simulation: {
-                repulsion: 0.5,
-                gravity: 0.1,
-                friction: 0.5,
-                linkDistance: 15,
-                linkStrength: 1
-            }
-        };
+            simulation: { repulsion: 0.1 }
+        });
 
-        const graph = new CosmoGraph(container, config);
-        
-        setTimeout(() => {
-            graph.zoomToNodes(data.nodes);
-            status.innerText = "Visualization Ready.";
-        }, 1000);
+        console.log("Pennsylvania Road Network successfully initialized!");
+        setTimeout(() => graph.zoomToNodes(data.nodes), 1000);
 
     } catch (err) {
-        status.innerText = "Error!";
-        console.error(err);
+        console.error("Initialization failed:", err);
     }
 }
 
