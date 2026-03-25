@@ -13,7 +13,8 @@ int main() {
     Graph test(edges, 1090920);
 
     // Export for visualizer 
-    test.exportJSON("data/road_network.json");
+    test.exportJSON("../data/road_network.json");
+    cout << "Updated Exported JSON FIle";
 
     //Test to demonstrate the Adjacency List
     cout << "\n--- ADJACENCY LIST DEMO ---" << endl;
