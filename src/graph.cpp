@@ -13,7 +13,7 @@ Graph::Graph(const vector<pair<int,int>>& edges, int n){
     AdjacencyList:
     
     Where Node[i] = {_,_,_,...} i, is the Node # and {} is the list of all connected nodes
-    Node 0 = {1,2} 
+    Node 0 = {1,2}
     Node 1 = {0,2}
     Node 2 = {0, 1}
     
