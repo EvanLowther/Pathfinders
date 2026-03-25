@@ -31,16 +31,6 @@ Graph::Graph(const vector<pair<int,int>>& edges, int n){
         sort(adjacencyList[i].begin(), adjacencyList[i].end());
     }
 }
-    //Test function to print first 10 nodes
-    void Graph::printTestNodes(int count) const{
-        for(int i = 0; i < count && i < nodeCount; i++){
-            cout << "Node " << i << ": ";
-            for(int neighbor : adjacencyList[i]){
-                cout << neighbor << " ";
-            }
-            cout << endl;
-        }
-    }
     //Returns list of neighbors to a Node
     const vector<int>& Graph::neighbors(int node) const{
         return adjacencyList[node];
@@ -49,3 +39,32 @@ Graph::Graph(const vector<pair<int,int>>& edges, int n){
     int Graph::size() const{
         return nodeCount;
     }
+    void Graph::exportJSON(const string& filename) const {
+    ofstream outFile(filename);
+    int limit = 1000; //Number of nodes (out of all in the file) to use out of the data set 
+    int actualNodes = min(nodeCount, limit);
+
+    outFile << "{\n  \"nodes\": [\n";
+    
+    //Id each node that we are representing in the graph
+    for (int i = 0; i < actualNodes; ++i) {
+        outFile << "    {\"id\": " << i << "}" << (i == actualNodes - 1 ? "" : ",\n");
+    }
+    
+    outFile << "\n  ],\n  \"links\": [\n";
+
+    // Export the edges connected nodes
+    bool first = true;
+    for (int i = 0; i < actualNodes; ++i) {
+        for (int neighbor : adjacencyList[i]) {
+            //This exports the edge as a neighbor to the node (in the file) if its within the first n nodes (test limit ex. 1000)
+            if (i < neighbor && neighbor < actualNodes) {
+                if (!first) outFile << ",\n";
+                outFile << "    {\"source\": " << i << ", \"target\": " << neighbor << "}";
+                first = false;
+            }
+        }
+    }
+    outFile << "\n  ]\n}";
+    outFile.close();
+}
