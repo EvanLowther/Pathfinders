@@ -45,7 +45,8 @@ Graph::Graph(const vector<pair<int,int>>& edges, int n){
     // Header for the CSV
     outFile << "ID,Source,Target\n";
 
-    int limit = 1000; 
+    //Amount of nodes in csv
+    int limit = 100000; 
     int actualNodes = min(nodeCount, limit);
     int edgeId = 0;
 
@@ -60,4 +61,6 @@ Graph::Graph(const vector<pair<int,int>>& edges, int n){
     }
     
     outFile.close();
+    cout << "Limit: " << limit << endl;
+    cout << "actualNodes: " << actualNodes << endl;
 }
