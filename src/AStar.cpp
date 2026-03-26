@@ -2,7 +2,7 @@
 // Created by maris on 3/25/2026.
 //
 
-#include "Astar.h"
+#include "AStar.h"
 #include <set>
 #include <limits>
 #include <algorithm>
