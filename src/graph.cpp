@@ -41,30 +41,26 @@ Graph::Graph(const vector<pair<int,int>>& edges, int n){
     }
     void Graph::exportJSON(const string& filename) const {
     ofstream outFile(filename);
-    int limit = 1000; //Number of nodes (out of all in the file) to use out of the data set 
+    
+    // Header for the CSV
+    outFile << "ID,Source,Target\n";
+
+    //Amount of nodes in csv
+    int limit = 100000; 
     int actualNodes = min(nodeCount, limit);
+    int edgeId = 0;
 
-    outFile << "{\n  \"nodes\": [\n";
-    
-    //Id each node that we are representing in the graph
-    for (int i = 0; i < actualNodes; ++i) {
-        outFile << "    {\"id\": " << i << "}" << (i == actualNodes - 1 ? "" : ",\n");
-    }
-    
-    outFile << "\n  ],\n  \"links\": [\n";
-
-    // Export the edges connected nodes
-    bool first = true;
     for (int i = 0; i < actualNodes; ++i) {
         for (int neighbor : adjacencyList[i]) {
-            //This exports the edge as a neighbor to the node (in the file) if its within the first n nodes (test limit ex. 1000)
+            // u < v logic prevents double-counting the road (e.g., 0-1 and 1-0)
             if (i < neighbor && neighbor < actualNodes) {
-                if (!first) outFile << ",\n";
-                outFile << "    {\"source\": " << i << ", \"target\": " << neighbor << "}";
-                first = false;
+                outFile << edgeId << "," << i << "," << neighbor << "\n";
+                edgeId++;
             }
         }
     }
-    outFile << "\n  ]\n}";
+    
     outFile.close();
+    cout << "Limit: " << limit << endl;
+    cout << "actualNodes: " << actualNodes << endl;
 }
