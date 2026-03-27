@@ -17,14 +17,14 @@ Dijkstras::Dijkstras(const Graph& graph, int startNode, int endNode) {
     while(!priorityQueue.empty()){
         int currNode = priorityQueue.front();
         priorityQueue.pop();
-        if(currNode = endNode){
+        if(currNode == endNode){
             break;                  // if the end node has been found, do not continue
         }
         vector<int> connectedNodes = graph.neighbors(currNode);
         for(int nextNode : connectedNodes){
             // if the connected node has not been visited and the path through
             // the current node is shorter than whats in the distance array
-            if(visitedNodes.find(currNode) != visitedNodes.end() && distance[nextNode] > distance[currNode] + 1){
+            if(visitedNodes.find(currNode) == visitedNodes.end() && distance[nextNode] > distance[currNode] + 1){
                 distance[nextNode] = distance[currNode] + 1; // update new shortest distance
                 priorityQueue.push(nextNode);                // add node to the priority queue
                 predecessor[nextNode] = currNode;            // add the current node as the connected node's shortest predecessor
@@ -32,9 +32,20 @@ Dijkstras::Dijkstras(const Graph& graph, int startNode, int endNode) {
         }
         visitedNodes.insert(currNode);
     }
-    shortestPath = printShortestPath(predecessor, endNode);
+    shortestPath = printShortestPath(predecessor, startNode, endNode);
+    delete[] predecessor;
 }
 
-std::string Dijkstras::printShortestPath(int* predecessors, int endNode){
+std::string Dijkstras::printShortestPath(int* predecessor, int startNode, int endNode){
+    std::string nodePath = std::to_string(endNode);
+    int it = predecessor[endNode];
+    while(it != startNode){
+        nodePath = std::to_string(predecessor[it]) + " " + nodePath;
+        it = predecessor[it];
+    }
+    return nodePath;
+}
 
+std::string Dijkstras::getShortestPath(){
+    return shortestPath;
 }

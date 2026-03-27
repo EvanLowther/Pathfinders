@@ -2,12 +2,13 @@
 #include <vector>
 #include "parser.h"
 #include "graph.h"
+#include "dijkstras.h"
 using namespace std;
 
 int main() {
     //Read/analyze function for the roadNet-PA.txt file
     cout << "Parsing Pennsylvania road network:" << endl;
-    vector<pair<int,int>> edges = parseFile("../data/roadNet-PA.txt");
+    vector<pair<int,int>> edges = parseFile("data/roadNet-PA.txt"); // the road network file must be in the build directory
     
     //Build the graph (this is where the adjacency list is created)
     Graph test(edges, 1090920);
@@ -36,6 +37,11 @@ int main() {
     } else {
         cout << "This node has no outgoing connections in the dataset." << endl;
     }
+
+    // Dijkstras testing
+    cout << "\n--- Dijkstras Algorithm DEMO ---" << endl;
+    Dijkstras DijkExample(test, 10, 421);
+    cout << "Shortest Path from Node 10 to Node 421: "<< DijkExample.getShortestPath() << std::endl;
 
     //Print Graph Statistics
     cout << "\n--- GRAPH STATISTICS ---" << endl;

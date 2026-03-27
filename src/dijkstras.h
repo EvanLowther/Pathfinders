@@ -11,8 +11,8 @@ class Dijkstras{
     std::string shortestPath;
 public:
     Dijkstras(const Graph& graph, int startNode, int endNode);
-    std::stringstream printShortestPath(int* predecessors, int endNode);
-
+    std::string printShortestPath(int* predecessors, int startNode, int endNode);
+    std::string getShortestPath();
 };
 
 #endif // DIJKSTRAS_H
