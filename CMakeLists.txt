@@ -21,7 +21,8 @@ set(SOURCES
 
 # Create the executable named 'roadgraph' 
 # (Matches your launch.json configuration)
-add_executable(roadgraph ${SOURCES})
+add_executable(roadgraph ${SOURCES}
+    src/dijkstras.h src/dijkstras.cpp)
 
 # Optional: Add compiler warnings to help catch bugs early
 if(MSVC)
