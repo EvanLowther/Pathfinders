@@ -5,13 +5,13 @@
 #include "graph.h"
 #include <set>
 #include <vector>
-#include<queue>
+#include <queue>
 
 class Dijkstras{
+    std::string shortestPath;
 public:
     Dijkstras(const Graph& graph, int startNode, int endNode);
-    void PrintAdjList();
-    void PrintShortestPath();
+    std::stringstream printShortestPath(int* predecessors, int endNode);
 
 };
 
