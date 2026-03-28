@@ -4,13 +4,13 @@
 #include "parser.h"
 #include "graph.h"
 #include "AStar.h"
-
+#include "dijkstras.h"
 using namespace std;
 
 int main() {
-    //Load and Parse Data
-    cout << "Parsing Pennsylvania road network..." << endl;
-    vector<pair<int, int>> edges = parseFile("../data/roadNet-PA.txt");
+    //Read/analyze function for the roadNet-PA.txt file
+    cout << "Parsing Pennsylvania road network:" << endl;
+    vector<pair<int,int>> edges = parseFile("data/roadNet-PA.txt"); // the road network file must be in the build directory
     
     //Build the Graph
     //Total nodes in roadNet-PA.txt is  1,090,920
@@ -56,7 +56,12 @@ int main() {
         cout << "No path exists between node " << startNode << " and node " << goalNode << "." << endl;
     }
 
-    //Graph Statistics
+    // Dijkstras testing
+    cout << "\n--- Dijkstras Algorithm DEMO ---" << endl;
+    Dijkstras DijkExample(test, 10, 421);
+    cout << "Shortest Path from Node 10 to Node 421: "<< DijkExample.getShortestPath() << std::endl;
+
+    //Print Graph Statistics
     cout << "\n--- GRAPH STATISTICS ---" << endl;
     cout << "Total Nodes in Dataset: " << test.size() << endl;
 
