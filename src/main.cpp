@@ -21,20 +21,19 @@ int main() {
     test.exportJSON("../data/road_network.json");
     cout << "Updated Exported JSON File." << endl;
 
-    //Run A* Pathfinding
-    cout << "\n--- ASTAR PATHFINDING TEST ---" << endl;
-    
     //Test parameters: feel free to change these IDs
     int startNode = 10;
-    int goalNode = 500; 
-
+    int goalNode = 500;
     cout << "Searching for shortest path from " << startNode << " to " << goalNode << endl;
+
+    //Run A* Pathfinding
+    cout << "\n--- ASTAR ALGORITHM ---" << endl;
 
     AStar astar;
     AStarResult result = astar.run(test, startNode, goalNode);
 
-    //Print All Visited Nodes
-    cout << "\nALL NODES VISITED BY ALGORITHM (" << result.visited.size() << " total):" << endl;
+    //Print A* All Visited Nodes
+    cout << "\nALL NODES VISITED BY A* ALGORITHM (" << result.visited.size() << " total):" << endl;
     if (result.visited.empty()) {
         cout << "None." << endl;
     } else {
@@ -44,26 +43,44 @@ int main() {
         cout << endl;
     }
 
-    //Print the Fastest Path
-    cout << "\n--- FINAL RESULTS ---" << endl;
-    if (!result.path.empty()) {
-        cout << "FASTEST PATH FOUND (" << result.path.size() << " nodes):" << endl;
-        for (size_t i = 0; i < result.path.size(); ++i) {
-            cout << result.path[i] << (i == result.path.size() - 1 ? "" : " -> ");
+    // Dijkstras testing
+    cout << "\n--- Dijkstras Algorithm ---" << endl;
+    Dijkstras DijkExample(test, startNode, goalNode);
+
+    // Print All Visited Nodes
+    cout << "\nALL NODES VISITED BY DIJKSTRA ALGORITHM (" << DijkExample.getVisitedCount() << " total):" << endl;
+    vector<int> visitedD = DijkExample.getVisited();
+    if (visitedD.empty()) {
+        cout << "None." << endl;
+    } else {
+        for (int node : visitedD) {
+            cout << node << " ";
         }
         cout << endl;
-    } else {
-        cout << "No path exists between node " << startNode << " and node " << goalNode << "." << endl;
     }
 
-    // Dijkstras testing
-    cout << "\n--- Dijkstras Algorithm DEMO ---" << endl;
-    Dijkstras DijkExample(test, 10, 421);
-    cout << "Shortest Path from Node 10 to Node 421: "<< DijkExample.getShortestPath() << std::endl;
+    //Print Shortest Path
+    cout << "\nDIJKSTRA SHORTEST PATH:" << endl;
+    cout << DijkExample.getShortestPath() << endl;
 
-    //Print Graph Statistics
-    cout << "\n--- GRAPH STATISTICS ---" << endl;
-    cout << "Total Nodes in Dataset: " << test.size() << endl;
+    cout << "\nA* SHORTEST PATH:" << endl;
+    if (!result.path.empty()) {
+    for (size_t i = 0; i < result.path.size(); ++i) {
+        cout << result.path[i] << (i == result.path.size() - 1 ? "" : " ");
+    }
+    cout << endl;
+    } else {
+    cout << "No path exists between node " << startNode << " and node " << goalNode << "." << endl;
+    }
+
+    //Print Path Stats
+    cout << "\nTOTAL NODES SEARCHED: " << endl;
+    cout << "DIKSTRA TOTAL: " << DijkExample.getVisitedCount() <<endl;
+    cout << "A* TOTAL: " << result.visited.size() << endl;
+
+    cout << "\nShortest Path Comparison: " << endl;
+    cout << "DIJKSTRA Fastest PATH: " << DijkExample.getPathCount() << " nodes" << endl;
+    cout << "A* Fastest PATH: " << result.path.size() << " nodes" << endl;
 
     return 0;
 }

@@ -61,6 +61,4 @@ Graph::Graph(const vector<pair<int,int>>& edges, int n){
     }
     
     outFile.close();
-    cout << "Limit: " << limit << endl;
-    cout << "actualNodes: " << actualNodes << endl;
 }
