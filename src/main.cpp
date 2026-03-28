@@ -17,26 +17,32 @@ int main() {
     int totalNodes = 1090920;
     Graph test(edges, totalNodes);
 
-
-    //Test parameters: feel free to change these IDs
+    //User Input for Node Searhing!
     int startNode;
     int goalNode;
-    cout << "Enter Starting Node(0-1.9Mil): ";
+
+    cout << "Enter Starting Node (0-" << totalNodes-1 << "): ";
     cin >> startNode;
     while(startNode < 0 || startNode >= totalNodes){
-        cout << "Invalid Number, Enter Again: ";
+        cout << "Invalid Number (0-" << totalNodes-1 << "), Enter Again: ";
         cin >> startNode;
     }
-    cout << "Enter End/Goal Node: ";
+
+    cout << "Enter End/Goal Node (0-" << totalNodes-1 << "): ";
     cin >> goalNode;
     while(goalNode < 0 || goalNode >= totalNodes){
-        cout << "Invalid Number, Enter Again: ";
+        cout << "Invalid Number (0-" << totalNodes-1 << "), Enter Again: ";
+        cin >> goalNode;
+    }
+
+    while(goalNode == startNode){
+        cout << "Start and Goal cannot be the same. Enter Again: ";
         cin >> goalNode;
     }
 
     //Export for Visualizer
-    test.exportJSON("../data/road_network.json");
-    cout << "Updated Exported JSON File." << endl;
+    test.exportJSON("../data/road_network.csv");
+    cout << "Updated Exported CSV File." << endl;
 
     cout << "\nSearching for shortest path from " << startNode << " to " << goalNode << endl;
 
