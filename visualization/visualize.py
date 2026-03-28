@@ -3,6 +3,7 @@ import pandas as pd
 from cosmograph import cosmo
 import os
 
+
 # --- SETUP PATHS ---
 base_path = os.path.dirname(os.path.abspath(__file__))
 csv_path = os.path.join(base_path, '..', 'data', 'road_network.csv')
@@ -82,7 +83,7 @@ try:
     )
 
     # --- EXECUTION ---
-    display(widget)
+    display(widget)   # works in Jupyter
 
     print("-" * 30)
     print(f"Total Unique Nodes: {len(points):,}")
