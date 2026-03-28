@@ -81,7 +81,15 @@ int main() {
 
     //Print Shortest Path
     cout << "\nDIJKSTRA SHORTEST PATH:" << endl;
-    cout << DijkExample.getShortestPath() << endl;
+    vector<int> pathD = DijkExample.getShortestPath();
+    if (!pathD.empty()) {
+        for (size_t i = 0; i < pathD.size(); ++i) {
+        cout << pathD[i] << (i == pathD.size() - 1 ? "" : " ");
+        }
+        cout << endl;
+    } else {
+        cout << "No path exists between node " << startNode << " and node " << goalNode << "." << endl;
+    }
 
     cout << "\nA* SHORTEST PATH:" << endl;
     if (!result.path.empty()) {
@@ -101,6 +109,13 @@ int main() {
     cout << "\nShortest Path Comparison: " << endl;
     cout << "DIJKSTRA Fastest PATH: " << DijkExample.getPathCount() << " nodes" << endl;
     cout << "A* Fastest PATH: " << result.path.size() << " nodes" << endl;
+
+    //Export Data to CSV now for Visualization
+    vector<int> visitedA(result.visited.begin(), result.visited.end());
+    test.exportNodesCSV("../output/astar_explored.csv", visitedA);
+    test.exportNodesCSV("../output/dijkstra_explored.csv", visitedD);
+    test.exportNodesCSV("../output/astar_path.csv", result.path);
+    test.exportNodesCSV("../output/dijkstra_path.csv", DijkExample.getShortestPath());
 
     return 0;
 }

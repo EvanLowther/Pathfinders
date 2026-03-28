@@ -1,98 +1,82 @@
 #include "dijkstras.h"
-#include <functional> // needed for std::greater
+#include <functional> // for std::greater
+#include <limits>
 using namespace std;
 
 Dijkstras::Dijkstras(const Graph& graph, int startNode, int endNode) {
-    int* distance = new int[graph.size()];
-    for(int i = 0; i < graph.size(); i++){
-        distance[i] = 100000; // assuming a node distance will never be more than 100k
-    }
-    distance[startNode] = 0; // start node -> start node distance is 0
+    int n = graph.size();
 
-    // priority queue now stores (distance, node)
-    priority_queue<
-        pair<int,int>,
-        vector<pair<int,int>>,
-        greater<>
-    > priorityQueue;
+    // Distance from start to each node (initialized to large value)
+    vector<int> distance(n, numeric_limits<int>::max());
+    distance[startNode] = 0;
 
-    priorityQueue.push({0, startNode});
+    // Priority queue stores (distance, node)
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<>> pq;
+    pq.push({0, startNode});
 
-    int* predecessor = new int[graph.size()];   // every entry node[i] holds the previous node in the shortest path
+    // Predecessor array to reconstruct path
+    vector<int> predecessor(n, -1);
 
-    while(!priorityQueue.empty()){
-        pair<int,int> top = priorityQueue.top();
-        priorityQueue.pop();
+    while(!pq.empty()) {
+        auto [dist, currNode] = pq.top();
+        pq.pop();
 
-        int currNode = top.second;
+        if(dist > distance[currNode]) continue; // outdated entry
+        if(currNode == endNode) break;          // reached goal
 
-        // skip outdated entries
-        if(top.first > distance[currNode]){
-            continue;
-        }
-
-        if(currNode == endNode){
-            break;                  // if the end node has been found, do not continue
-        }
-
-        vector<int> connectedNodes = graph.neighbors(currNode);
-        for(int nextNode : connectedNodes){
-            // if the path through the current node is shorter than what's in the distance array
-            if(distance[nextNode] > distance[currNode] + 1){
-                distance[nextNode] = distance[currNode] + 1; // update new shortest distance
-                priorityQueue.push({distance[nextNode], nextNode}); // add node to the priority queue
-                predecessor[nextNode] = currNode;            // add the current node as the connected node's shortest predecessor
+        // Explore neighbors
+        for(int next : graph.neighbors(currNode)) {
+            if(distance[next] > distance[currNode] + 1) { // edge weight = 1
+                distance[next] = distance[currNode] + 1;
+                pq.push({distance[next], next});
+                predecessor[next] = currNode;
             }
         }
 
-        visited.push_back(currNode);   // store visit order
+        visited.push_back(currNode); // record visit order
     }
 
     visitedCount = visited.size(); // total visited nodes
-
-    shortestPath = printShortestPath(predecessor, startNode, endNode);
-
-    delete[] predecessor;
-    delete[] distance;
+    shortestPath = printShortestPath(predecessor.data(), startNode, endNode); // reconstruct path
 }
 
-string Dijkstras::printShortestPath(int* predecessor, int startNode, int endNode){
-    string nodePath = to_string(endNode);
-    int it = predecessor[endNode];
+// Reconstruct shortest path as vector
+vector<int> Dijkstras::printShortestPath(int* predecessor, int startNode, int endNode) {
+    vector<int> path;
+    int it = endNode;
 
-    pathCount = 1; // start from end node
+    // If no path exists
+    if(predecessor[it] == -1 && it != startNode) {
+        pathCount = 0;
+        return path;
+    }
 
-    // safeguard: stop if it == -1 to avoid infinite loop
-    while(it != startNode && it != -1){
-        nodePath = to_string(it) + " " + nodePath;
+    while(it != -1) {
+        path.insert(path.begin(), it); // prepend
+        pathCount++;
+        if(it == startNode) break;
         it = predecessor[it];
-        pathCount++;
     }
 
-    if(it == startNode){
-        nodePath = to_string(startNode) + " " + nodePath;
-        pathCount++;
-    }
-
-    return nodePath;
+    return path;
 }
 
-// Shortest Path 
-string Dijkstras::getShortestPath(){ 
+// Get shortest path
+vector<int> Dijkstras::getShortestPath() {
     return shortestPath;
 }
 
-// All Visited Nodes
-vector<int> Dijkstras::getVisited(){
+// All visited nodes
+vector<int> Dijkstras::getVisited() {
     return visited;
 }
 
-// Total Visited Nodes (Count)
-int Dijkstras::getVisitedCount(){
+// Total visited nodes count
+int Dijkstras::getVisitedCount() {
     return visitedCount;
 }
 
-// Fastest Path Count
-int Dijkstras::getPathCount(){ 
+// Path length (number of nodes)
+int Dijkstras::getPathCount() {
     return pathCount;
 }

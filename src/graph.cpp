@@ -86,3 +86,17 @@ void Graph::exportCSV(const string& filename, int startNode, int goalNode) const
 
     outFile.close();
 }
+void Graph::exportNodesCSV(const string& filename, const vector<int>& nodes) const {
+    ofstream outFile(filename);
+    if (!outFile.is_open()) {
+        cerr << "Error: Cannot open file " << filename << endl;
+        return;
+    }
+
+    outFile << "node_id\n";  // header
+    for (int node : nodes) {
+        outFile << node << "\n";
+    }
+
+    outFile.close();
+}

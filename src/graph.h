@@ -23,4 +23,6 @@ public:
     void exportCSV(const string& filename, int startNode, int goalNode) const;
 
     int size() const; //Number of Nodes
+
+    void exportNodesCSV(const std::string& filename, const std::vector<int>& nodes) const;
 };
