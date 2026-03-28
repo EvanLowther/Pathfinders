@@ -106,10 +106,6 @@ int main() {
     cout << "DIKSTRA TOTAL: " << DijkExample.getVisitedCount() <<endl;
     cout << "A* TOTAL: " << result.visited.size() << endl;
 
-    cout << "\nShortest Path Comparison: " << endl;
-    cout << "DIJKSTRA Fastest PATH: " << DijkExample.getPathCount() << " nodes" << endl;
-    cout << "A* Fastest PATH: " << result.path.size() << " nodes" << endl;
-
     //Export Data to CSV now for Visualization
     vector<int> visitedA(result.visited.begin(), result.visited.end());
     test.exportNodesCSV("../output/astar_explored.csv", visitedA);
