@@ -40,9 +40,9 @@ int main() {
         cin >> goalNode;
     }
 
-    //Export for Visualizer
-    test.exportJSON("../data/road_network.csv");
-    cout << "Updated Exported CSV File." << endl;
+    //Export for Visualizer (CSV)
+    test.exportCSV("../data/road_network.csv", startNode, goalNode);
+    cout << "Exported relevant graph nodes surrounding start and goal." << endl;
 
     cout << "\nSearching for shortest path from " << startNode << " to " << goalNode << endl;
 
