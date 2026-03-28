@@ -17,6 +17,8 @@ set(SOURCES
     src/graph.cpp
     src/graph.h
     src/parser.h
+        src/AStar.h
+        src/AStar.cpp
 )
 
 # Create the executable named 'roadgraph' 
