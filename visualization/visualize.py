@@ -44,7 +44,7 @@ try:
     def get_node_data(nid):
         nid_str = str(nid)
         if nid_str == start_node or nid_str == end_node:
-            return 'Shortest_Path', 100       # extra large for visibility
+            return 'Shortest_Path', 50       
         if nid_str in path_nodes:
             return 'Shortest_Path', 20
         if nid_str in explored_nodes:
@@ -60,7 +60,7 @@ try:
 
     link_color_map = {
         'Shortest_Path': 'rgba(0, 33, 165, 1.0)',
-        'Explored': 'rgba(250, 70, 22, 0.01)',
+        'Explored': 'rgba(250, 70, 22, 0.5)',
         'All Nodes': 'rgba(255, 255, 255, 0.01)'
     }
     df['link_color_custom'] = df['link_state'].map(link_color_map)
@@ -81,7 +81,7 @@ try:
         link_greyout_opacity=0.0,
         
         point_size_by='size',
-        point_size_range=[1, 100],  # min/max size scaling based on zoom
+        point_size_range=[1, 50],  # min/max size scaling based on zoom
         point_color_by='state',
         point_color_palette=my_palette,
         
