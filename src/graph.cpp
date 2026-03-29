@@ -1,5 +1,7 @@
 #include "graph.h"
 #include <algorithm>
+#include <queue>
+#include <set>
 
 Graph::Graph(const vector<pair<int,int>>& edges, int n){
     nodeCount = n;
@@ -16,55 +18,85 @@ Graph::Graph(const vector<pair<int,int>>& edges, int n){
     Node 0 = {1,2}
     Node 1 = {0,2}
     Node 2 = {0, 1}
-    
     */
     for (auto &edgeXY : edges) {
         int x = edgeXY.first;    //Node A in the edge
         int y = edgeXY.second;   //Node B in the edge
 
-        //Add each node to the others adjacency list (connected to eachother)
+        //Add each node to the others adjacency list (connected to each other)
         adjacencyList[x].push_back(y); 
         adjacencyList[y].push_back(x);
     }
+
     //Sort neighbor lists (ascending order)
     for(int i = 0; i < nodeCount; i++){
         sort(adjacencyList[i].begin(), adjacencyList[i].end());
     }
 }
-    //Returns list of neighbors to a Node
-    const vector<int>& Graph::neighbors(int node) const{
-        return adjacencyList[node];
-    }
-    //Total Nodes in graph
-    int Graph::size() const{
-        return nodeCount;
-    }
-    void Graph::exportJSON(const string& filename) const {
+
+//Returns list of neighbors to a Node
+const vector<int>& Graph::neighbors(int node) const{
+    return adjacencyList[node];
+}
+
+//Total Nodes in graph
+int Graph::size() const{
+    return nodeCount;
+}
+
+//Export up to 100k nodes surrounding startNode and goalNode
+void Graph::exportCSV(const string& filename, int startNode, int goalNode) const {
     ofstream outFile(filename);
-    int limit = 1000; //Number of nodes (out of all in the file) to use out of the data set 
-    int actualNodes = min(nodeCount, limit);
 
-    outFile << "{\n  \"nodes\": [\n";
-    
-    //Id each node that we are representing in the graph
-    for (int i = 0; i < actualNodes; ++i) {
-        outFile << "    {\"id\": " << i << "}" << (i == actualNodes - 1 ? "" : ",\n");
-    }
-    
-    outFile << "\n  ],\n  \"links\": [\n";
+    // Header for the CSV
+    outFile << "Source,Target\n";
 
-    // Export the edges connected nodes
-    bool first = true;
-    for (int i = 0; i < actualNodes; ++i) {
-        for (int neighbor : adjacencyList[i]) {
-            //This exports the edge as a neighbor to the node (in the file) if its within the first n nodes (test limit ex. 1000)
-            if (i < neighbor && neighbor < actualNodes) {
-                if (!first) outFile << ",\n";
-                outFile << "    {\"source\": " << i << ", \"target\": " << neighbor << "}";
-                first = false;
+    // Use BFS to find the most relevant nodes
+    const int limit = 100000; 
+    set<int> relevantNodes;
+    queue<int> q;
+
+    // Start BFS from both startNode and goalNode
+    q.push(startNode);
+    q.push(goalNode);
+    relevantNodes.insert(startNode);
+    relevantNodes.insert(goalNode);
+
+    while(!q.empty() && relevantNodes.size() < limit){
+        int curr = q.front();
+        q.pop();
+
+        for(int neighbor : adjacencyList[curr]){
+            if(relevantNodes.size() >= limit) break;
+            if(relevantNodes.find(neighbor) == relevantNodes.end()){
+                relevantNodes.insert(neighbor);
+                q.push(neighbor);
             }
         }
     }
-    outFile << "\n  ]\n}";
+
+    // Export all edges where both endpoints are in relevantNodes
+    for(int node : relevantNodes){
+        for(int neighbor : adjacencyList[node]){
+            if(relevantNodes.find(neighbor) != relevantNodes.end()){
+                outFile << node << "," << neighbor << "\n";
+            }
+        }
+    }
+
+    outFile.close();
+}
+void Graph::exportNodesCSV(const string& filename, const vector<int>& nodes) const {
+    ofstream outFile(filename);
+    if (!outFile.is_open()) {
+        cerr << "Error: Cannot open file " << filename << endl;
+        return;
+    }
+
+    outFile << "node_id\n";  // header
+    for (int node : nodes) {
+        outFile << node << "\n";
+    }
+
     outFile.close();
 }

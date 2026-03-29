@@ -3,6 +3,7 @@
 #include <sstream>
 #include <iostream>
 #include <set>
+#include <filesystem>
 
 /*
 parser.cpp file, reads graph dataset file and returns all edges as pairs
@@ -12,11 +13,12 @@ Each line of the dataset shound contain 2 integers(FromNodeID ToNodeID)
 
 vector<pair<int,int>> parseFile(const string& filename){
     set<pair<int,int>> edges;           //Store all egdes as pairs
+    std::cout << "CWD: " << std::filesystem::current_path() << std::endl;
     ifstream file(filename);            //Open File
 
     //Check file actually opens
     if(!file.is_open()){
-        cerr << "Error: File Could not open or be found" << filename << endl;
+        cerr << "Error: File Could not open or be found \"" << filename << "\"" << endl;
         return vector<pair<int,int>>();           //Return empty vector if file cant be found
     }
     string line;                //Temp variable storing each line
