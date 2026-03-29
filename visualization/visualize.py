@@ -6,49 +6,68 @@ import os
 # --- SETUP PATHS ---
 base_path = os.path.dirname(os.path.abspath(__file__))
 csv_path = os.path.join(base_path, '..', 'data', 'road_network.csv')
+astar_path_csv = os.path.join(base_path, '..', 'output', 'astar_path.csv')
+astar_explored_csv = os.path.join(base_path, '..', 'output', 'astar_explored.csv')
+dijkstra_path_csv = os.path.join(base_path, '..', 'output', 'dijkstra_path.csv')
+dijkstra_explored_csv = os.path.join(base_path, '..', 'output', 'dijkstra_explored.csv')
 
 try:
     # --- DATA LOADING ---
-    df = pd.read_csv(csv_path, dtype=int)  # Make sure node IDs are ints
-    
-    all_nodes = pd.concat([df['Source'], df['Target']]).unique()
+    df_road = pd.read_csv(csv_path, dtype=int)
+    all_nodes = pd.concat([df_road['Source'], df_road['Target']]).unique()
     points = pd.DataFrame({'node_id': all_nodes})
 
+    # --- USER CHOICE ---
+    choice = input("Which algorithm to display? \n1.A* \n2.Dijkstra").strip().lower()
+    if choice == '1':
+        path_csv = astar_path_csv
+        explored_csv = astar_explored_csv
+    elif choice == '2':
+        path_csv = dijkstra_path_csv
+        explored_csv = dijkstra_explored_csv
+    else:
+        print("Invalid choice, defaulting to A*")
+        path_csv = astar_path_csv
+        explored_csv = astar_explored_csv
+
     # --- NODE STATE & SIZE LOGIC ---
-    path_nodes = ['10', '77', '76', '69','70','58','50']
-    explored_nodes = ['10', '11', '22', '77', '44', '58', '69','76','197','45']
+    path_nodes = pd.read_csv(path_csv, dtype=int)['node_id'].astype(str).tolist()
+    explored_nodes = pd.read_csv(explored_csv, dtype=int)['node_id'].astype(str).tolist()
+
+    # Identify start and end nodes
+    if path_nodes:
+        start_node = path_nodes[0]
+        end_node = path_nodes[-1]
+    else:
+        start_node = end_node = None
 
     def get_node_data(nid):
         nid_str = str(nid)
+        if nid_str == start_node or nid_str == end_node:
+            return 'Shortest_Path', 100       # extra large for visibility
         if nid_str in path_nodes:
-            return 'Path', 50000     # large size for visibility
+            return 'Shortest_Path', 20
         if nid_str in explored_nodes:
-            return 'Explored', 50000
-        return 'All Nodes', 0.1        
+            return 'Explored', 5
+        return 'All Nodes', 1        
 
-    points[['state', 'size']] = points['node_id'].apply(
-        lambda x: pd.Series(get_node_data(x))
-    )
+    points[['state', 'size']] = points['node_id'].apply(lambda x: pd.Series(get_node_data(x)))
 
     # --- LINK COLOR & WIDTH SYNC ---
     node_state_map = dict(zip(points['node_id'], points['state']))
-
-    # Assign state to links based on source node
+    df = df_road.copy()
     df['link_state'] = df['Source'].map(node_state_map).fillna('All Nodes')
 
-    # Map link state to color with opacity (RGBA)
     link_color_map = {
-        'Path': 'rgba(41, 248, 4, 1.0)',       # green, fully opaque
-        'Explored': 'rgba(239, 247, 6, 1.0)',  # yellow, fully opaque
-        'All Nodes': 'rgba(255, 255, 255, 0.01)' # white, 20% opacity
+        'Shortest_Path': 'rgba(0, 33, 165, 1.0)',
+        'Explored': 'rgba(250, 70, 22, 0.01)',
+        'All Nodes': 'rgba(255, 255, 255, 0.01)'
     }
     df['link_color_custom'] = df['link_state'].map(link_color_map)
-
-    # Uniform thickness for all links
     df['width'] = 0.2
 
     # --- NODE COLOR PALETTE ---
-    my_palette = ["#EFF706", "#29F804", "#616460"]  # Explored, Path, All Nodes
+    my_palette = ["#0021A5", "#FA6A16A9", "#616460"]  # Explored, Path, All Nodes
 
     # --- INITIALIZE COSMOGRAPH WIDGET ---
     widget = cosmo(
@@ -61,25 +80,22 @@ try:
         point_greyout_opacity=0.0,
         link_greyout_opacity=0.0,
         
-        # Node Styling
-        point_size_by='size', 
+        point_size_by='size',
+        point_size_range=[1, 100],  # min/max size scaling based on zoom
         point_color_by='state',
         point_color_palette=my_palette,
         
-        # Link Styling
-        link_color_by='link_color_custom',  # use the color column
-        link_width_by='width',        
+        link_color_by='link_color_custom',
+        link_width_by='width',
         
         background_color='#020617',
         fit_view_padding=0,  
 
-        # --- SIMULATION DISABLED ---
-        disable_simulation=True
+        disable_simulation=False
     )
 
-    # --- EXECUTION ---
+    # --- DISPLAY ---
     display(widget)
-
     print("-" * 30)
     print(f"Total Unique Nodes: {len(points):,}")
     print(f"Total Road Segments (Links): {len(df):,}")
@@ -87,4 +103,5 @@ try:
 
 except Exception as e:
     print(f"Error: {e}")
+
 # %%
