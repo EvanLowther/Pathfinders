@@ -10,14 +10,14 @@ using namespace std;
 int main() {
     //Read/analyze function for the roadNet-PA.txt file
     cout << "Parsing Pennsylvania road network:" << endl;
-    vector<pair<int,int>> edges = parseFile("../data/roadNet-PA.txt"); // the road network file must be in the build directory
+    vector<pair<int,int>> edges = parseFile("../data/roadNet-PA.txt");
     
     //Build the Graph
     //Total nodes in roadNet-PA.txt is  1,090,920
     int totalNodes = 1090920;
     Graph test(edges, totalNodes);
 
-    //User Input for Node Searhing!
+    //User Input for Node Searhing
     int startNode;
     int goalNode;
 
@@ -102,9 +102,9 @@ int main() {
     }
 
     //Print Path Stats
-    cout << "\nTOTAL NODES SEARCHED: " << endl;
-    cout << "DIKSTRA TOTAL: " << DijkExample.getVisitedCount() <<endl;
-    cout << "A* TOTAL: " << result.visited.size() << endl;
+    cout << "\nShortest Path Length: " << endl;
+    cout << "DIKSTRA: " << DijkExample.getPathCount() << endl;
+    cout << "A*: " << result.path.size() << endl;
 
     //Export Data to CSV now for Visualization
     vector<int> visitedA(result.visited.begin(), result.visited.end());

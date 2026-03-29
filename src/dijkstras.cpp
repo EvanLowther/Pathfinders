@@ -76,7 +76,7 @@ int Dijkstras::getVisitedCount() {
     return visitedCount;
 }
 
-// Path length (number of nodes)
+// Shortest Path length (number of nodes)
 int Dijkstras::getPathCount() {
     return pathCount;
 }
