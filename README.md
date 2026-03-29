@@ -40,13 +40,13 @@ Terminal will print A* and Dijkstra:
 - Shortest Path Count
 
 Output File Updated:\
-[Output Files](https://dummyimage.com/468x300?text=App+Screenshot+Here)
+[Output Files](/resources/Output_pathways.png)
 -
 
 ## Visualization
 Locate Visualize.py file in the Visualization folder\
 Click on Run Cell\
-[Run Cell](https://dummyimage.com/468x300?text=App+Screenshot+Here)
+[Run Cell](/resources/Options_pathways.png)
 
 At the top Enter\
 1 for A*\
@@ -54,7 +54,9 @@ At the top Enter\
 Let it Load (If longer than 30s restart close popup and re-run)
 
 ## Output
-[Output](https://dummyimage.com/468x300?text=App+Screenshot+Here)
+[Output](/resources/All_Paths.png)
+[Output](/resources/Explored_Path.png)
+[Output](/resources/Shortest_Path.png)
 ## Support
 
 For support, email evanlowther12@gmail.com
