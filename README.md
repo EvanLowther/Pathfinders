@@ -29,7 +29,7 @@ Build and Run on Windows
   ./run.bat
 ```
 Console Input(Enter Start and End Node):\
-[Console Input](../resources/Console_Input.png)
+[Console Input](/resources/Console_Input.png)
 -
 
 Output:\
