@@ -8,18 +8,16 @@
 using namespace std;
 
 int main() {
-    //Read/analyze function for the roadNet-PA.txt file
+    // Read/analyze the roadNet-PA.txt file
     cout << "Parsing Pennsylvania road network:" << endl;
     vector<pair<int,int>> edges = parseFile("../data/roadNet-PA.txt");
     
-    //Build the Graph
-    //Total nodes in roadNet-PA.txt is  1,090,920
+    // Build the Graph
     int totalNodes = 1090920;
     Graph test(edges, totalNodes);
 
-    //User Input for Node Searhing
-    int startNode;
-    int goalNode;
+    // User Input for Node Searching
+    int startNode, goalNode;
 
     cout << "Enter Starting Node (0-" << totalNodes-1 << "): ";
     cin >> startNode;
@@ -30,88 +28,55 @@ int main() {
 
     cout << "Enter End/Goal Node (0-" << totalNodes-1 << "): ";
     cin >> goalNode;
-    while(goalNode < 0 || goalNode >= totalNodes){
-        cout << "Invalid Number (0-" << totalNodes-1 << "), Enter Again: ";
+    while(goalNode < 0 || goalNode >= totalNodes || goalNode == startNode){
+        cout << "Invalid goal. Enter Again: ";
         cin >> goalNode;
     }
 
-    while(goalNode == startNode){
-        cout << "Start and Goal cannot be the same. Enter Again: ";
-        cin >> goalNode;
-    }
-
-    //Export for Visualizer (CSV)
+    // Export for Visualizer (CSV)
     test.exportCSV("../data/road_network.csv", startNode, goalNode);
     cout << "Exported relevant graph nodes surrounding start and goal." << endl;
 
     cout << "\nSearching for shortest path from " << startNode << " to " << goalNode << endl;
 
-    //Run A* Pathfinding
-    cout << "\n--- ASTAR ALGORITHM ---" << endl;
-
+    // --- A* Algorithm ---
     AStar astar;
     AStarResult result = astar.run(test, startNode, goalNode);
-
-    //Print A* All Visited Nodes
-    cout << "\nALL NODES VISITED BY A* ALGORITHM (" << result.visited.size() << " total):" << endl;
-    if (result.visited.empty()) {
-        cout << "None." << endl;
-    } else {
-        for (int node : result.visited) {
-            cout << node << " ";
-        }
-        cout << endl;
-    }
-
-    // Dijkstras testing
-    cout << "\n--- Dijkstras Algorithm ---" << endl;
-    Dijkstras DijkExample(test, startNode, goalNode);
-
-    // Print All Visited Nodes
-    cout << "\nALL NODES VISITED BY DIJKSTRA ALGORITHM (" << DijkExample.getVisitedCount() << " total):" << endl;
-    vector<int> visitedD = DijkExample.getVisited();
-    if (visitedD.empty()) {
-        cout << "None." << endl;
-    } else {
-        for (int node : visitedD) {
-            cout << node << " ";
-        }
-        cout << endl;
-    }
-
-    //Print Shortest Path
-    cout << "\nDIJKSTRA SHORTEST PATH:" << endl;
-    vector<int> pathD = DijkExample.getShortestPath();
-    if (!pathD.empty()) {
-        for (size_t i = 0; i < pathD.size(); ++i) {
-        cout << pathD[i] << (i == pathD.size() - 1 ? "" : " ");
-        }
-        cout << endl;
-    } else {
-        cout << "No path exists between node " << startNode << " and node " << goalNode << "." << endl;
-    }
-
-    cout << "\nA* SHORTEST PATH:" << endl;
-    if (!result.path.empty()) {
-    for (size_t i = 0; i < result.path.size(); ++i) {
-        cout << result.path[i] << (i == result.path.size() - 1 ? "" : " ");
-    }
-    cout << endl;
-    } else {
-    cout << "No path exists between node " << startNode << " and node " << goalNode << "." << endl;
-    }
-
-    //Print Path Stats
-    cout << "\nShortest Path Length: " << endl;
-    cout << "DIKSTRA: " << DijkExample.getPathCount() << endl;
-    cout << "A*: " << result.path.size() << endl;
-
-    //Export Data to CSV now for Visualization
     vector<int> visitedA(result.visited.begin(), result.visited.end());
+
+    // --- Dijkstra Algorithm ---
+    Dijkstras DijkExample(test, startNode, goalNode);
+    vector<int> visitedD = DijkExample.getVisited();
+    vector<int> pathD = DijkExample.getShortestPath();
+
+    // --- PRINT ALL EXPLORED NODES ---
+    cout << "\nA* All Explored Nodes (" << visitedA.size() << "):" << endl;
+    for (int node : visitedA) cout << node << " ";
+    cout << endl;
+
+    cout << "\nDijkstra All Explored Nodes (" << visitedD.size() << "):" << endl;
+    for (int node : visitedD) cout << node << " ";
+    cout << endl;
+
+    // --- PRINT SHORTEST PATHS ---
+    cout << "\nDijkstra Shortest Path:" << endl;
+    for (size_t i = 0; i < pathD.size(); ++i) cout << pathD[i] << (i == pathD.size()-1 ? "" : " ");
+    cout << endl;
+
+    cout << "\nA* Shortest Path:" << endl;
+    for (size_t i = 0; i < result.path.size(); ++i) cout << result.path[i] << (i == result.path.size()-1 ? "" : " ");
+    cout << endl;
+
+    // --- PRINT SHORTEST PATH LENGTHS ---
+    cout << "\nShortest Path Lengths:" << endl;
+    cout << "Dijkstra: " << pathD.size() << " Nodes" << endl;
+    cout << "A*: " << result.path.size() << " Nodes" << endl;
+
+    // Export Data to CSV for Visualization
     test.exportNodesCSV("../output/astar_explored.csv", visitedA);
     test.exportNodesCSV("../output/dijkstra_explored.csv", visitedD);
     test.exportNodesCSV("../output/astar_path.csv", result.path);
-    test.exportNodesCSV("../output/dijkstra_path.csv", DijkExample.getShortestPath());
+    test.exportNodesCSV("../output/dijkstra_path.csv", pathD);
 
     return 0;
 }
