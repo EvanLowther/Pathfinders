@@ -1,7 +1,7 @@
 
 # Pensylvania Pathways
 
-A pathfinding and graph analysis tool built in C++ that implements and compares Dijkstra’s and A* algorithms on real-world road network data, with CSV export and interactive visualization using Python.
+This project is a C++ pathfinding and graph analysis tool designed to evaluate routing efficiency on Pensylvania road network data. It implements and compares Dijkstra’s algorithm and A* search algorithm to determine optimal paths between nodes. The system processes large datasets with over 1 million nodes, exports results to CSV, and enables further analysis and visualization through Python. This allows for clear performance comparisons and intuitive exploration of how each algorithm behaves across different scenarios.
 
 
 
