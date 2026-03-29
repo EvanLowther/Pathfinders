@@ -29,7 +29,7 @@ Build and Run on Windows
   ./run.bat
 ```
 Console Input(Enter Start and End Node):\
-[Console Input](/resources/Console_Input.png)
+![Console Input](/resources/Console_Input.png)
 -
 
 Output:\
@@ -40,13 +40,13 @@ Terminal will print A* and Dijkstra:
 - Shortest Path Count
 
 Output File Updated:\
-[Output Files](/resources/Output_pathways.png)
+![Output Files](/resources/Output_pathways.png)
 -
 
 ## Visualization
 Locate Visualize.py file in the Visualization folder\
 Click on Run Cell\
-[Run Cell](/resources/Options_pathways.png)
+![Run Cell](/resources/Options_pathways.png)
 
 At the top Enter\
 1 for A*\
@@ -54,12 +54,16 @@ At the top Enter\
 Let it Load (If longer than 30s restart close popup and re-run)
 
 ## Output
-[Output](/resources/All_Paths.png)
-[Output](/resources/Explored_Path.png)
-[Output](/resources/Shortest_Path.png)
-## Support
+All Paths Displayed
+![Output](/resources/All_Paths.png)
+-
+Explored Path Displayed
+![Output](/resources/Explored_Path.png)
+-
+Shortest Path Displayed
+![Output](/resources/Shortest_Path.png)
+-
 
-For support, email evanlowther12@gmail.com
 ## Support
 
 For support, email evanlowther12@gmail.com
