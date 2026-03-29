@@ -53,7 +53,7 @@ At the top Enter\
 2 for Dijkstra\
 Let it Load (If longer than 30s restart close popup and re-run)
 
-## Output
+## Output - Displays 100k Most Relevant Nodes 
 All Paths Displayed
 ![Output](/resources/All_Paths.png)
 -
