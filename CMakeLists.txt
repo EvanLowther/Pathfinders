@@ -28,11 +28,3 @@ if(MSVC)
 else()
     target_compile_options(roadgraph PRIVATE -Wall -Wextra -Wpedantic)
 endif()
-
-# --- Set the default output folder for binaries ---
-set_target_properties(roadgraph PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin
-)
-
-# --- Copy data files to the binary folder automatically ---
-file(COPY ${PROJECT_SOURCE_DIR}/data DESTINATION ${PROJECT_SOURCE_DIR}/bin)

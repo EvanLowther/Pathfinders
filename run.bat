@@ -1,7 +1,21 @@
 @echo off
-mkdir -p build
+
+REM Create build folder if it doesn't exist
+if not exist build (
+    mkdir build
+)
+
+REM Go into build directory
 cd build
+
+REM Run CMake
 cmake ..
+
+REM Build project
 cmake --build .
-..\bin\roadgraph.exe
-pause
+
+REM Run executable
+roadgraph.exe
+
+REM Go back to root
+cd ..
